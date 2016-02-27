@@ -34,6 +34,8 @@
                     <ul role="menu" class="dropdown-menu">
                         <li><a class="menuitem" href="javascript:;" data-value="/publish">发布任务书</a>
                         </li>
+                        <li><a class="menuitem" href="javascript:;" data-value="/publishlist">课题列表</a>
+                        </li>
                     </ul>
                 </li>
             </ul>

@@ -1,3 +1,4 @@
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%--
   Created by IntelliJ IDEA.
   User: C0dEr
@@ -14,14 +15,26 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="renderer" content="webkit">
     <%@ include file="common/globalCSS.jsp" %>
-    <link href="/themes/css/plugins/steps/jquery.steps.css" rel="stylesheet">
 </head>
 <body class="gray-bg top-navigation">
 <div id="wrapper">
     <div id="page-wrapper" class="gray-bg">
+        <%
+            if (request.getAttribute("role").equals("教师")) {
+        %>
         <jsp:include page="common/thmenu.jsp"/>
-        <div class="wrapper-content" >
-            <iframe class="J_iframe" id="mainframe" width="100%"  frameborder="0" seamless height="100%" src="/welcome"></iframe>
+        <%
+        } else {
+        %>
+        <jsp:include page="common/stumenu.jsp"/>
+        <%
+            }
+
+        %>
+
+        <div class="wrapper-content">
+            <iframe class="J_iframe" id="mainframe" width="100%" frameborder="0" seamless height="100%"
+                    src="/welcome"></iframe>
         </div>
         <jsp:include page="common/foot.jsp"/>
     </div>

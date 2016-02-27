@@ -7,9 +7,11 @@ import com.reportmanage.service.IUserService;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.SessionAttributes;
 import org.springframework.web.servlet.ModelAndView;
 
 import javax.annotation.Resource;
+import javax.servlet.http.HttpSession;
 import java.util.HashMap;
 
 /**
@@ -21,7 +23,10 @@ public class IndexController extends BaseController {
     private IUserService userService;
 
     @RequestMapping("/")
-    public ModelAndView Index() {
+    public ModelAndView Index(HttpSession session) {
+        if (getCurrentUser(session) != null) {
+            return new ModelAndView("redirect:main");
+        }
         ModelAndView view = new ModelAndView("login");
         view.addObject("systemname", "学生");
         return view;
@@ -42,7 +47,7 @@ public class IndexController extends BaseController {
     }
 
     @RequestMapping(value = "login", method = {RequestMethod.POST})
-    public String Login(LoginModel model) {
+    public String Login(LoginModel model, HttpSession session) {
         if (model != null) {
             HashMap<String, String> map = new HashMap<String, String>();
             map.put("username", model.getUsername());
@@ -50,7 +55,8 @@ public class IndexController extends BaseController {
             map.put("role", model.getLogintype());
             User mUser = userService.getUser(map);
             if (mUser != null) {
-                CurrentUser = mUser;
+                setCurrentUser(mUser);
+                session.setAttribute("user", mUser);
                 return "redirect:main";
             }
         }
