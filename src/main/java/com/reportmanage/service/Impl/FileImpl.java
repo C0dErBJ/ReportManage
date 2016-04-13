@@ -26,4 +26,8 @@ public class FileImpl implements IFileService {
     public boolean deleteFile(int id) {
         return this.fileMapper.deleteByPrimaryKey(id) >= 1;
     }
+
+    public int insertBackPri(File record) {
+        return this.fileMapper.insertBackPri(record);
+    }
 }

@@ -11,4 +11,6 @@ public interface IFileService {
     File getFile(int id);
 
     boolean deleteFile(int id);
+
+    int insertBackPri(File record);
 }

@@ -23,4 +23,8 @@ public class MissonImpl implements IMissionService {
     public List<Mission> getMissionbyUser(int i) {
         return this.missionMapper.selectByUserId(i);
     }
+
+    public Mission selectMissionByClassWithUserid(int userid) {
+       return missionMapper.selectByUserIdThoughtClass(userid);
+    }
 }

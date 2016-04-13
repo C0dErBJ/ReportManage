@@ -11,4 +11,6 @@ public interface IMissionService {
     boolean addMission(Mission model);
 
     List<Mission> getMissionbyUser(int i);
+
+    Mission selectMissionByClassWithUserid(int userid);
 }

@@ -54,4 +54,6 @@ public interface MissionMapper {
     int updateByPrimaryKey(Mission record);
 
     List<Mission> selectByUserId(int i);
+
+    Mission selectByUserIdThoughtClass(int i);
 }

@@ -32,28 +32,18 @@
                     <a aria-expanded="false" role="button" href="#" class="dropdown-toggle" data-toggle="dropdown">任务书
                         <span class="caret"></span></a>
                     <ul role="menu" class="dropdown-menu">
-                        <li><a href="">菜单列表</a>
+                        <li><a class="menuitem" href="javascript:;" data-value="/student/mission">我的任务书</a>
                         </li>
-                        <li><a href="">菜单列表</a>
-                        </li>
-                        <li><a href="">菜单列表</a>
-                        </li>
-                        <li><a href="">菜单列表</a>
-                        </li>
+
                     </ul>
                 </li>
                 <li class="dropdown">
-                    <a aria-expanded="false" role="button" href="#" class="dropdown-toggle" data-toggle="dropdown"> 菜单
+                    <a aria-expanded="false" role="button" href="#" class="dropdown-toggle" data-toggle="dropdown">课题模板
                         <span class="caret"></span></a>
                     <ul role="menu" class="dropdown-menu">
-                        <li><a href="">菜单列表</a>
+                        <li><a class="menuitem" href="javascript:;" data-value="/student/reportedit">模板编辑</a>
                         </li>
-                        <li><a href="">菜单列表</a>
-                        </li>
-                        <li><a href="">菜单列表</a>
-                        </li>
-                        <li><a href="">M菜单列表</a>
-                        </li>
+
                     </ul>
                 </li>
             </ul>
@@ -67,3 +57,10 @@
         </div>
     </nav>
 </div>
+<jsp:include page="globalJs.jsp"/>
+<script>
+    $(".menuitem").click(function(){
+        var url=$(this).attr("data-value");
+        $("#mainframe").attr("src",url);
+    });
+</script>

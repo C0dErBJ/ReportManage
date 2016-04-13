@@ -50,4 +50,6 @@ public interface FileMapper {
      * @mbggenerated
      */
     int updateByPrimaryKey(File record);
+
+    int insertBackPri(File record);
 }
