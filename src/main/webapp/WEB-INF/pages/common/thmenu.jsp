@@ -8,7 +8,7 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <div class="row border-bottom white-bg">
     <nav class="navbar navbar-static-top" role="navigation">
-        <li class="navbar-header">
+        <div class="navbar-header">
             <div class="dropdown profile-element">
                 <a data-toggle="dropdown" class="dropdown-toggle" href="#">
                                 <span class="clear" style="margin-left: 10px">
@@ -22,7 +22,7 @@
                     </li>
                 </ul>
             </div>
-        </li>
+        </div>
         <div class="navbar-collapse collapse" id="navbar">
             <ul class="nav navbar-nav">
                 <li class="active">
@@ -34,6 +34,13 @@
                     <ul role="menu" class="dropdown-menu">
                         <li><a class="menuitem" href="javascript:;" data-value="/publish">发布任务书</a>
                         </li>
+                    </ul>
+                </li>
+                <li class="dropdown">
+                    <a aria-expanded="false" role="button" href="#" class="dropdown-toggle" data-toggle="dropdown">审阅
+                        <span class="caret"></span></a>
+                    <ul role="menu" class="dropdown-menu">
+
                         <li><a class="menuitem" href="javascript:;" data-value="/publishlist">课题列表</a>
                         </li>
                     </ul>

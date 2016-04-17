@@ -27,6 +27,7 @@ import java.io.IOException;
 import java.io.OutputStream;
 import java.io.UnsupportedEncodingException;
 import java.util.Date;
+import java.util.HashMap;
 
 /**
  * Created by C0dEr on 16/2/24.
@@ -61,17 +62,10 @@ public class FileUploadController {
             } catch (IOException e) {
                 e.printStackTrace();
             }
-            boolean isSave = fileService.upload(file);
+            int isSave = fileService.insertBackPri(file);
             return file;
         }
-        ObjectMapper mapper = new ObjectMapper();
-        String str = "";
-        try {
-            str = mapper.writeValueAsString(new File());
-        } catch (JsonProcessingException e) {
-            e.printStackTrace();
-        }
-        return str;
+        return "";
     }
 
     @RequestMapping(value = "/{id}", method = RequestMethod.GET)

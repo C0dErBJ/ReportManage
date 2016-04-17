@@ -28,6 +28,14 @@ public class MissionModel {
         this.fileid = fileid;
     }
 
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
+    }
+    public int id;
     private String title;
     private String des;
     private String fileid;

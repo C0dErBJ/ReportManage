@@ -11,11 +11,13 @@ import com.fasterxml.jackson.databind.util.JSONPObject;
 import com.reportmanage.controller.base.BaseController;
 import com.reportmanage.controller.model.main.publish.MissionModel;
 import com.reportmanage.dao.MissionMapper;
+import com.reportmanage.model.Commit;
 import com.reportmanage.model.File;
 import com.reportmanage.model.Mission;
-import com.reportmanage.service.IFileService;
-import com.reportmanage.service.IMissionService;
+import com.reportmanage.model.Progress;
+import com.reportmanage.service.*;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -40,6 +42,12 @@ public class PublishController extends BaseController {
     private IMissionService missionService;
     @Resource
     private IFileService fileService;
+    @Resource
+    private ICommitService commitService;
+    @Resource
+    private IUserService userService;
+    @Resource
+    private IProgressService progressService;
 
     @RequestMapping("publish")
     public String Index() {
@@ -48,7 +56,7 @@ public class PublishController extends BaseController {
 
     @RequestMapping(value = "publish", method = RequestMethod.POST)
     @ResponseBody
-    public ModelAndView publish(MissionModel model, HttpSession session) {
+    public ModelAndView publish(MissionModel model, HttpSession session, final RedirectAttributes redirectAttributes) {
         if (model != null) {
             Mission bean = new Mission();
             bean.setDescription(model.getDes());
@@ -57,14 +65,12 @@ public class PublishController extends BaseController {
             bean.setUserid(getCurrentUser(session).getId());
             bean.setCreatetime(new Date());
             boolean result = missionService.addMission(bean);
-            RedirectAttributes map = new RedirectAttributesModelMap();
-            map.addAttribute("redUrl", "/teacher/publish");
-            map.addAttribute("status", "Success");
-            return new ModelAndView("handlerresult");
+            redirectAttributes.addFlashAttribute("redUrl", "/publishlist");
+            redirectAttributes.addFlashAttribute("status", "Success");
+            return new ModelAndView("redirect:/afterSubmit");
         }
-        RedirectAttributes map = new RedirectAttributesModelMap();
-        map.addAttribute("redUrl", "/teacher/publish");
-        map.addAttribute("status", "Fail");
+        redirectAttributes.addFlashAttribute("redUrl", "/publishlist");
+        redirectAttributes.addFlashAttribute("status", "Fail");
         return new ModelAndView("redirect:/afterSubmit");
     }
 
@@ -91,10 +97,78 @@ public class PublishController extends BaseController {
             model.des = item.getDescription();
             model.title = item.getTitle();
             model.url = "<a href='/file/" + item.getFileid() + "' class='btn btn-primary'>下载</a>";
+            model.detail = "<a href='/missionlist/" + item.getId() + "' class='btn btn-primary'>查看</a>";
             an.addPOJO(model);
         }
         root.putArray("data").addAll(an);
         return root;
+    }
+
+
+    @RequestMapping(value = "commitdetail/{i}")
+    public ModelAndView CommitDetail(@PathVariable int i){
+        ModelAndView view = new ModelAndView("/teacher/commitdetail");
+        Commit commit=commitService.getCommit(i);
+        view.addObject("status",commit.getIspass());
+        view.addObject("stdes",commit.getStudentnote());
+        view.addObject("thdes",commit.getTeachernote());
+        view.addObject("filepath",commit.getFileid());
+        view.addObject("commitid",commit.getId());
+        return view;
+    }
+
+    @RequestMapping(value = "commitnote", method = RequestMethod.POST)
+
+    @ResponseBody
+    public ModelAndView commit(MissionModel model, HttpSession session, final RedirectAttributes redirectAttributes) {
+       Commit commit=commitService.getCommit(model.getId());
+        if(commit==null){
+            redirectAttributes.addFlashAttribute("redUrl", "/publishlist");
+            redirectAttributes.addFlashAttribute("status", "Fail");
+            return new ModelAndView("redirect:/afterSubmit");
+        }
+        commit.setTeachernote(model.getDes());
+        commit.setIspass(model.getTitle().equals("已通过")?1:0);
+        commitService.update(commit);
+        if(model.getTitle().equals("已通过")){
+            Progress progress=new Progress();
+            progress.setUserid(commit.getUserid());
+            progress.setCreatetime(new Date());
+            progress.setDescription("审阅通过");
+            progress.setMissionid(commit.getMissionid());
+            progressService.insertProgress(progress);
+        }
+        redirectAttributes.addFlashAttribute("redUrl", "/publishlist");
+        redirectAttributes.addFlashAttribute("status", "Success");
+        return new ModelAndView("redirect:/afterSubmit");
+    }
+    @ResponseBody
+    @RequestMapping(value = "detail/{i}", method = RequestMethod.GET)
+    public Object detail(@PathVariable int i) {
+        List<Commit> list = commitService.getCommits(i);
+        ObjectMapper mapper = new ObjectMapper();
+        ObjectNode root = mapper.createObjectNode();
+        root.put("draw", list.size());
+        root.put("recordsTotal", list.size());
+        root.put("recordsFiltered", list.size());
+        ArrayNode an = root.arrayNode();
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+        for (Commit item : list) {
+            missionModel model = new missionModel();
+            model.des = item.getIspass() > 0 ? "完成" : "未完成";
+            model.title = userService.getUser(item.getUserid()).getName();
+            model.url = "<a href='/commitdetail/" + item.getId() + "' class='btn btn-primary'>查看</a>";
+            an.addPOJO(model);
+        }
+        root.putArray("data").addAll(an);
+        return root;
+    }
+
+    @RequestMapping(value = "missionlist/{i}", method = RequestMethod.GET)
+    public ModelAndView missionlist(@PathVariable int i) {
+        ModelAndView view = new ModelAndView("/teacher/missonList");
+        view.addObject("id", i);
+        return view;
     }
 
     private class missionModel {
@@ -102,5 +176,7 @@ public class PublishController extends BaseController {
         public String title;
         public String des;
         public String url;
+        public String detail;
     }
+
 }

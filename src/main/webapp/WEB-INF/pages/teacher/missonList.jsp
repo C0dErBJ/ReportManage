@@ -1,8 +1,8 @@
 <%--
   Created by IntelliJ IDEA.
   User: C0dEr
-  Date: 16/2/24
-  Time: 下午6:14
+  Date: 16/4/14
+  Time: 下午5:38
   To change this template use File | Settings | File Templates.
 --%>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
@@ -20,19 +20,16 @@
     <div class="row">
         <div class="col-sm-12">
             <div class="ibox-title">
-                <h3>任务书列表</h3>
-
+                <h3>学生完成情况</h3>
             </div>
             <div class="ibox float-e-margins">
                 <div class="ibox-content">
                     <table class="table table-striped table-bordered table-hover wrapper-content " id="datatable">
                         <thead>
                         <tr>
-                            <th>创建时间</th>
-                            <th>课题名称</th>
-                            <th>课题描述</th>
-                            <th>文件下载</th>
-                            <th>提交情况</th>
+                            <th>名字</th>
+                            <th>是否完成</th>
+                            <th>详情</th>
                         </tr>
                         </thead>
                     </table>
@@ -58,14 +55,12 @@
         "processing": true,
         "serverSide": true,
         "columns": [
-            {"data": "date"},
             {"data": "title"},
             {"data": "des"},
             {"data": "url"},
-            {"data": "detail"}
         ],
         "ajax": {
-            "url": "/mypublishlist",
+            "url": "/detail/${id}",
             "type": "get",
         }
     })

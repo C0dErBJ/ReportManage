@@ -16,11 +16,17 @@
     <meta name="renderer" content="webkit">
     <%@ include file="common/globalCSS.jsp" %>
 </head>
+<script>
+    var red="${red}"
+    if(red!=""){
+        window.parent.location.href=red;
+    }
+</script>
 <body class="gray-bg top-navigation">
 <div id="wrapper">
     <div id="page-wrapper" class="gray-bg">
         <%
-            if (request.getAttribute("role").equals("教师")) {
+            if (request.getAttribute("role")!=null&&request.getAttribute("role").equals("教师")) {
         %>
         <jsp:include page="common/thmenu.jsp"/>
         <%

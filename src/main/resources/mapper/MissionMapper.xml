@@ -143,14 +143,14 @@
         where userid = #{userid,jdbcType=INTEGER}
     </select>
     <select id="selectByUserIdThoughtClass"  resultMap="BaseResultMap">
-       select * from mission m where m.userid=(
-select distinct u.id from User u inner join UserOfClass uc on u.id=uc.userid
-where uc.classid=(
-select distinct classid from UserOfClass
-where classid=(
-SELECT         uc.classid
-FROM User u INNER JOIN UserOfClass uc on u.id=uc.userid  WHERE uc.userid=#{id,jdbcType=INTEGER} )) and role='教师'
-)
-
+select   * from mission m where m.userid=(
+  select distinct u.id from User u inner join UserOfClass uc on u.id=uc.userid
+  where uc.classid=(
+    select distinct classid from UserOfClass
+    where classid=(
+      SELECT         uc.classid
+      FROM User u INNER JOIN UserOfClass uc on u.id=uc.userid  WHERE uc.userid=#{id,jdbcType=INTEGER} )) and role='教师'
+    )  ORDER BY  m.CreateTime DESC LIMIT 1
     </select>
+
 </mapper>
