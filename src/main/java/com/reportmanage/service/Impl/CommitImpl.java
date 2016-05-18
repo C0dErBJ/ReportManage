@@ -25,6 +25,10 @@ public class CommitImpl implements ICommitService {
         return commitMapper.selectByUserId(id);
     }
 
+    public Commit getCommitById(int id) {
+        return commitMapper.selectByPrimaryKey(id);
+    }
+
     public List<Commit> getCommits(int id) {
         return commitMapper.selectByMissionId(id);
     }
