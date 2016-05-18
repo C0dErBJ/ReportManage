@@ -108,12 +108,12 @@ public class PublishController extends BaseController {
     @RequestMapping(value = "commitdetail/{i}")
     public ModelAndView CommitDetail(@PathVariable int i){
         ModelAndView view = new ModelAndView("/teacher/commitdetail");
-        Commit commit=commitService.getCommit(i);
+        Commit commit=commitService.getCommitById(i);
         view.addObject("status",commit.getIspass());
         view.addObject("stdes",commit.getStudentnote());
         view.addObject("thdes",commit.getTeachernote());
         view.addObject("filepath",commit.getFileid());
-        view.addObject("commitid",commit.getId());
+        view.addObject("commitid",commit.getUserid());
         return view;
     }
 

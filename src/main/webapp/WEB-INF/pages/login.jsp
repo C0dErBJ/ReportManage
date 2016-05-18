@@ -42,7 +42,7 @@
             </div>
             <input type="hidden" value="${systemname}" name="logintype"/>
             <button type="submit" class="btn btn-primary block full-width m-b">登 录</button>
-            <p class="text-muted text-center"><a href="${systemname=="教师系统"?"/loginstu":"loginth"}">
+            <p class="text-muted text-center"><a href="${systemname=="教师"?"loginstu":"loginth"}">
                 <small>${systemname.equals("教师")?"学生登录":"教师登陆"}</small>
             </a>
             </p>
