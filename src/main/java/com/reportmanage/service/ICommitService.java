@@ -13,6 +13,8 @@ public interface ICommitService {
 
     Commit getCommit(int id);
 
+    Commit getCommitById(int id);
+
     List<Commit> getCommits(int id);
 
     boolean update(Commit commit);
