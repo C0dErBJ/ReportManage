@@ -19,7 +19,6 @@
           <element id="library" level="project" name="Maven: org.slf4j:jcl-over-slf4j:1.7.5" />
           <element id="library" level="project" name="Maven: org.slf4j:slf4j-log4j12:1.7.5" />
           <element id="library" level="project" name="Maven: commons-lang:commons-lang:2.4" />
-          <element id="library" level="project" name="Maven: commons-codec:commons-codec:1.3" />
           <element id="library" level="project" name="Maven: org.apache.xmlgraphics:xmlgraphics-commons:1.5" />
           <element id="library" level="project" name="Maven: org.apache.xmlgraphics:fop:1.1" />
           <element id="library" level="project" name="Maven: org.apache.xmlgraphics:batik-svg-dom:1.7" />
@@ -44,7 +43,6 @@
           <element id="library" level="project" name="Maven: xalan:serializer:2.7.1" />
           <element id="library" level="project" name="Maven: net.arnx:wmf2svg:0.9.0" />
           <element id="library" level="project" name="Maven: org.apache.poi:poi-scratchpad:3.8" />
-          <element id="library" level="project" name="Maven: org.apache.poi:poi:3.8" />
           <element id="library" level="project" name="Maven: org.antlr:antlr-runtime:3.3" />
           <element id="library" level="project" name="Maven: org.antlr:stringtemplate:3.2.1" />
           <element id="library" level="project" name="Maven: antlr:antlr:2.7.7" />
@@ -75,7 +73,9 @@
           <element id="library" level="project" name="Maven: com.fasterxml.jackson.core:jackson-databind:2.7.1-1" />
           <element id="library" level="project" name="Maven: com.fasterxml.jackson.core:jackson-core:2.7.1" />
           <element id="library" level="project" name="Maven: com.fasterxml.jackson.core:jackson-annotations:2.7.1" />
-          <element id="library" level="project" name="Maven: javax.servlet:servlet-api:3.0-alpha-1" />
+          <element id="library" level="project" name="Maven: javax.servlet:javax.servlet-api:3.1.0" />
+          <element id="library" level="project" name="Maven: org.apache.poi:poi:3.9" />
+          <element id="library" level="project" name="Maven: commons-codec:commons-codec:1.5" />
         </element>
       </element>
       <element id="directory" name="META-INF">

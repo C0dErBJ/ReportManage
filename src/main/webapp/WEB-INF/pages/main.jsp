@@ -16,6 +16,11 @@
     <meta name="renderer" content="webkit">
     <%@ include file="common/globalCSS.jsp" %>
 </head>
+<style>
+    body{
+        font-size: 18px;
+    }
+</style>
 <script>
     var red="${red}"
     if(red!=""){

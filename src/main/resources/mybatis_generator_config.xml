@@ -41,7 +41,7 @@
         </javaClientGenerator>
 
         <!-- !!!! Table Configurations !!!! -->
-        <table tableName="Commit" enableCountByExample="false" enableDeleteByExample="false"
+        <table tableName="Template" enableCountByExample="false" enableDeleteByExample="false"
                enableSelectByExample="false"
                enableUpdateByExample="false"
         />

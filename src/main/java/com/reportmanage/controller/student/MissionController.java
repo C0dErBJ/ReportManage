@@ -2,14 +2,10 @@ package com.reportmanage.controller.student;
 
 import com.reportmanage.controller.base.BaseController;
 import com.reportmanage.controller.model.main.publish.MissionModel;
-import com.reportmanage.model.Commit;
-import com.reportmanage.model.Mission;
-import com.reportmanage.model.Progress;
-import com.reportmanage.service.ICommitService;
-import com.reportmanage.service.IFileService;
-import com.reportmanage.service.IMissionService;
-import com.reportmanage.service.IProgressService;
+import com.reportmanage.model.*;
+import com.reportmanage.service.*;
 import com.reportmanage.utils.HtmlConverter;
+import com.reportmanage.utils.Word2Html;
 import org.apache.commons.io.FileUtils;
 import org.docx4j.openpackaging.packages.WordprocessingMLPackage;
 import org.springframework.http.HttpHeaders;
@@ -26,8 +22,10 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
+import javax.xml.parsers.ParserConfigurationException;
+import javax.xml.transform.TransformerException;
+import java.io.*;
 import java.io.File;
-import java.io.IOException;
 import java.util.Date;
 
 /**
@@ -44,6 +42,8 @@ public class MissionController extends BaseController {
     private ICommitService commitService;
     @Resource
     private IProgressService progressService;
+    @Resource
+    private ITemplateService templateService;
 
     @RequestMapping("mission")
     public ModelAndView mission(HttpSession session) {
@@ -58,8 +58,33 @@ public class MissionController extends BaseController {
     }
 
     @RequestMapping("reportedit")
-    public ModelAndView reportedit() {
+    public ModelAndView reportedit(HttpServletRequest request) throws IOException, TransformerException, ParserConfigurationException {
         ModelAndView view = new ModelAndView("student/ReportEdit");
+        Template model = templateService.getTemplate();
+        if (model != null) {
+            String dirpath = request.getSession().getServletContext().getRealPath("/") + "/uploads/change/" + new Date().getTime() + ".html";
+            java.io.File path = new File(request.getSession().getServletContext().getRealPath("/") + "/uploads/change/");
+            if (!path.exists()) {
+                path.mkdir();
+            }
+            com.reportmanage.model.File f = fileService.getFile(Integer.parseInt(model.getName()));
+            if (f != null){
+                Word2Html.convert2Html(f.getFilepath(), dirpath);
+            }else{
+                view.addObject("");
+                return view;
+            }
+
+            BufferedReader br = new BufferedReader(new InputStreamReader(new FileInputStream(dirpath)));
+            StringBuilder sb = new StringBuilder();
+            String data = null;
+            while ((data = br.readLine()) != null) {
+                sb.append(data);
+            }
+            view.addObject("html", sb.toString());
+        } else {
+            view.addObject("");
+        }
         return view;
     }
 
@@ -83,7 +108,7 @@ public class MissionController extends BaseController {
         file.setFilepath(dirpath.getAbsolutePath());
         file.setFilename("模板.docx");
         int i = fileService.insertBackPri(file);
-        Progress mo=new Progress();
+        Progress mo = new Progress();
         mo.setMissionid(missionService.selectMissionByClassWithUserid(getCurrentUser(session).getId()).getId());
         mo.setCreatetime(new Date());
         mo.setDescription("模板下载");
@@ -122,7 +147,7 @@ public class MissionController extends BaseController {
         commitModel.setStudentnote(model.getDes());
         commitModel.setUserid(getCurrentUser(session).getId());
         commitService.commit(commitModel);
-        Progress mo=new Progress();
+        Progress mo = new Progress();
         mo.setMissionid(missionService.selectMissionByClassWithUserid(getCurrentUser(session).getId()).getId());
         mo.setCreatetime(new Date());
         mo.setDescription("提交作业");

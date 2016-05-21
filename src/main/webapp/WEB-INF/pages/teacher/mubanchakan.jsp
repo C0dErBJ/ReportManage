@@ -1,14 +1,14 @@
 <%--
   Created by IntelliJ IDEA.
   User: C0dEr
-  Date: 16/2/28
-  Time: 下午7:43
+  Date: 16/5/18
+  Time: 下午9:24
   To change this template use File | Settings | File Templates.
 --%>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <html>
 <head>
-    <title>我的任务书</title>
+    <title>模板查看</title>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="renderer" content="webkit">
@@ -17,7 +17,7 @@
     <link href="/themes/css/plugins/summernote/summernote-bs3.css" rel="stylesheet">
 
     <style>
-        body{
+        body {
             font-size: 18px;
         }
     </style>
@@ -27,15 +27,11 @@
     <div class="row">
         <div class=" float-e-margins">
             <div class="ibox-title">
-                <h5>模板编辑</h5>
-                <button id="edit" class="btn btn-primary btn-xs m-l-sm" onclick="edit()" type="button">编辑
-                </button>
-                <button id="save" class="btn btn-primary  btn-xs" onclick="save()" type="button">下载</button>
+                <h5>模板查看</h5>
             </div>
             <div class="ibox-content" id="eg">
                 <div class="summernote click2edit">
                     ${html}
-
                 </div>
 
             </div>
@@ -66,7 +62,7 @@
             data: data,
             dataType: "json",
             success: function (response) {
-                $("#file").attr("src","/file/"+response);
+                $("#file").attr("src", "/file/" + response);
             }
         });
     };

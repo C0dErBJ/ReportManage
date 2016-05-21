@@ -1,36 +1,34 @@
 package com.reportmanage.controller.teacher;
 
-import com.fasterxml.jackson.core.JsonFactory;
-import com.fasterxml.jackson.core.JsonGenerator;
 import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ArrayNode;
 import com.fasterxml.jackson.databind.node.ObjectNode;
-import com.fasterxml.jackson.databind.util.JSONPObject;
 import com.reportmanage.controller.base.BaseController;
 import com.reportmanage.controller.model.main.publish.MissionModel;
-import com.reportmanage.dao.MissionMapper;
 import com.reportmanage.model.Commit;
-import com.reportmanage.model.File;
 import com.reportmanage.model.Mission;
 import com.reportmanage.model.Progress;
+import com.reportmanage.model.Template;
 import com.reportmanage.service.*;
+import com.reportmanage.utils.Word2Html;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
-import org.springframework.web.servlet.mvc.support.RedirectAttributesModelMap;
 
 import javax.annotation.Resource;
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
+import javax.xml.parsers.ParserConfigurationException;
+import javax.xml.transform.TransformerException;
+import java.io.*;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
 import java.util.Date;
-import java.util.HashMap;
 import java.util.List;
 
 /**
@@ -48,6 +46,8 @@ public class PublishController extends BaseController {
     private IUserService userService;
     @Resource
     private IProgressService progressService;
+    @Resource
+    private ITemplateService templateService;
 
     @RequestMapping("publish")
     public String Index() {
@@ -106,14 +106,14 @@ public class PublishController extends BaseController {
 
 
     @RequestMapping(value = "commitdetail/{i}")
-    public ModelAndView CommitDetail(@PathVariable int i){
+    public ModelAndView CommitDetail(@PathVariable int i) {
         ModelAndView view = new ModelAndView("/teacher/commitdetail");
-        Commit commit=commitService.getCommitById(i);
-        view.addObject("status",commit.getIspass());
-        view.addObject("stdes",commit.getStudentnote());
-        view.addObject("thdes",commit.getTeachernote());
-        view.addObject("filepath",commit.getFileid());
-        view.addObject("commitid",commit.getUserid());
+        Commit commit = commitService.getCommitById(i);
+        view.addObject("status", commit.getIspass());
+        view.addObject("stdes", commit.getStudentnote());
+        view.addObject("thdes", commit.getTeachernote());
+        view.addObject("filepath", commit.getFileid());
+        view.addObject("commitid", commit.getUserid());
         return view;
     }
 
@@ -121,17 +121,17 @@ public class PublishController extends BaseController {
 
     @ResponseBody
     public ModelAndView commit(MissionModel model, HttpSession session, final RedirectAttributes redirectAttributes) {
-       Commit commit=commitService.getCommit(model.getId());
-        if(commit==null){
+        Commit commit = commitService.getCommit(model.getId());
+        if (commit == null) {
             redirectAttributes.addFlashAttribute("redUrl", "/publishlist");
             redirectAttributes.addFlashAttribute("status", "Fail");
             return new ModelAndView("redirect:/afterSubmit");
         }
         commit.setTeachernote(model.getDes());
-        commit.setIspass(model.getTitle().equals("已通过")?1:0);
+        commit.setIspass(model.getTitle().equals("已通过") ? 1 : 0);
         commitService.update(commit);
-        if(model.getTitle().equals("已通过")){
-            Progress progress=new Progress();
+        if (model.getTitle().equals("已通过")) {
+            Progress progress = new Progress();
             progress.setUserid(commit.getUserid());
             progress.setCreatetime(new Date());
             progress.setDescription("审阅通过");
@@ -142,6 +142,7 @@ public class PublishController extends BaseController {
         redirectAttributes.addFlashAttribute("status", "Success");
         return new ModelAndView("redirect:/afterSubmit");
     }
+
     @ResponseBody
     @RequestMapping(value = "detail/{i}", method = RequestMethod.GET)
     public Object detail(@PathVariable int i) {
@@ -179,4 +180,53 @@ public class PublishController extends BaseController {
         public String detail;
     }
 
+    @RequestMapping("template")
+    public ModelAndView template() {
+        ModelAndView view = new ModelAndView("/teacher/mubanshangchuan");
+        return view;
+    }
+
+    @RequestMapping(value = "template", method = RequestMethod.POST)
+    public ModelAndView settemplate(String fileid, final RedirectAttributes redirectAttributes) {
+        Template model = new Template();
+        model.setName(fileid);
+        templateService.addTemplate(model);
+        redirectAttributes.addFlashAttribute("redUrl", "/template");
+        redirectAttributes.addFlashAttribute("status", "Success");
+        return new ModelAndView("redirect:/afterSubmit");
+
+    }
+
+    @RequestMapping("templatechakan")
+    public ModelAndView templatechakan(HttpServletRequest request) throws ParserConfigurationException, TransformerException, IOException {
+        ModelAndView view = new ModelAndView("/teacher/mubanchakan");
+        Template model = templateService.getTemplate();
+        if (model != null) {
+            String dirpath = request.getSession().getServletContext().getRealPath("/") + "/uploads/change/" + new Date().getTime() + ".html";
+            java.io.File path = new File(request.getSession().getServletContext().getRealPath("/") + "/uploads/change/");
+            if (!path.exists()) {
+                path.mkdir();
+            }
+            com.reportmanage.model.File f = fileService.getFile(Integer.parseInt(model.getName()));
+            if (f != null){
+                Word2Html.convert2Html(f.getFilepath(), dirpath);
+            }else{
+                view.addObject("");
+                return view;
+            }
+            Word2Html.convert2Html(fileService.getFile(Integer.parseInt(model.getName())).getFilepath(), dirpath);
+
+            BufferedReader br = new BufferedReader(new InputStreamReader(new FileInputStream(dirpath)));
+            StringBuilder sb = new StringBuilder();
+            String data = null;
+            while ((data = br.readLine()) != null) {
+                sb.append(data);
+            }
+            view.addObject("html",sb.toString());
+        } else {
+            view.addObject("");
+        }
+
+        return view;
+    }
 }

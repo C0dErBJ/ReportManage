@@ -14,6 +14,12 @@
     <meta name="renderer" content="webkit">
     <%@ include file="../common/globalCSS.jsp" %>
     <link href="/themes/css/plugins/dataTables/dataTables.bootstrap.css" rel="stylesheet">
+
+    <style>
+        body{
+            font-size: 18px;
+        }
+    </style>
 </head>
 <body class="gray-bg">
 <div class="wrapper wrapper-content animated fadeInRight">

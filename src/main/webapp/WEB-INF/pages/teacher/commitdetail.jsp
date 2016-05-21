@@ -15,6 +15,12 @@
     <%@ include file="../common/globalCSS.jsp" %>
     <link href="/themes/css/plugins/steps/jquery.steps.css" rel="stylesheet">
     <link href="/themes/css/plugins/uploadify/uploadify.css" rel="stylesheet">
+
+    <style>
+        body{
+            font-size: 18px;
+        }
+    </style>
 </head>
 <body class="gray-bg">
 <div class="wrapper animated fadeInRight">

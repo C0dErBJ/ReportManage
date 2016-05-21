@@ -40,8 +40,9 @@
                     <a aria-expanded="false" role="button" href="#" class="dropdown-toggle" data-toggle="dropdown">课题模板
                         <span class="caret"></span></a>
                     <ul role="menu" class="dropdown-menu">
-
-                        <li><a class="menuitem" href="javascript:;" data-value="/publishlist">上传课题模板</a>
+                        <li><a class="menuitem" href="javascript:;" data-value="/template">上传课题模板</a>
+                        </li>
+                        <li><a class="menuitem" href="javascript:;" data-value="/templatechakan">模板查看</a>
                         </li>
                     </ul>
                 </li>
