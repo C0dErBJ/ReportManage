@@ -44,6 +44,10 @@ public class MissionController extends BaseController {
     private IProgressService progressService;
     @Resource
     private ITemplateService templateService;
+    @Resource
+    private IRequireService requireServicel;
+    @Resource
+    private IGuideBookService guideBookService;
 
     @RequestMapping("mission")
     public ModelAndView mission(HttpSession session) {
@@ -158,4 +162,27 @@ public class MissionController extends BaseController {
         return new ModelAndView("redirect:/afterSubmit");
     }
 
+    @RequestMapping("require")
+    public ModelAndView require(HttpSession session) {
+        ModelAndView view = new ModelAndView("student/require");
+        Require mission = requireServicel.selectRequireByClassWithUserid(getCurrentUser(session).getId());
+        if (mission != null) {
+            view.addObject("title", mission.getTitle());
+            view.addObject("des", mission.getDescription());
+            view.addObject("filepath", mission.getFileid());
+        }
+        return view;
+    }
+
+    @RequestMapping("guidebook")
+    public ModelAndView guidebook(HttpSession session) {
+        ModelAndView view = new ModelAndView("student/guidebook");
+        Guidebook mission = guideBookService.selectGuideBookByClassWithUserid(getCurrentUser(session).getId());
+        if (mission != null) {
+            view.addObject("title", mission.getTitle());
+            view.addObject("des", mission.getDescription());
+            view.addObject("filepath", mission.getFileid());
+        }
+        return view;
+    }
 }

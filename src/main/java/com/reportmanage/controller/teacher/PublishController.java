@@ -5,11 +5,10 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ArrayNode;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import com.reportmanage.controller.base.BaseController;
+import com.reportmanage.controller.model.main.publish.GuideBookModel;
 import com.reportmanage.controller.model.main.publish.MissionModel;
-import com.reportmanage.model.Commit;
-import com.reportmanage.model.Mission;
-import com.reportmanage.model.Progress;
-import com.reportmanage.model.Template;
+import com.reportmanage.controller.model.main.publish.RequireModel;
+import com.reportmanage.model.*;
 import com.reportmanage.service.*;
 import com.reportmanage.utils.Word2Html;
 import org.springframework.stereotype.Controller;
@@ -27,6 +26,7 @@ import javax.servlet.http.HttpSession;
 import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.transform.TransformerException;
 import java.io.*;
+import java.io.File;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
@@ -48,6 +48,10 @@ public class PublishController extends BaseController {
     private IProgressService progressService;
     @Resource
     private ITemplateService templateService;
+    @Resource
+    private IRequireService requireServicel;
+    @Resource
+    private IGuideBookService guideBookService;
 
     @RequestMapping("publish")
     public String Index() {
@@ -208,9 +212,9 @@ public class PublishController extends BaseController {
                 path.mkdir();
             }
             com.reportmanage.model.File f = fileService.getFile(Integer.parseInt(model.getName()));
-            if (f != null){
+            if (f != null) {
                 Word2Html.convert2Html(f.getFilepath(), dirpath);
-            }else{
+            } else {
                 view.addObject("");
                 return view;
             }
@@ -222,11 +226,61 @@ public class PublishController extends BaseController {
             while ((data = br.readLine()) != null) {
                 sb.append(data);
             }
-            view.addObject("html",sb.toString());
+            view.addObject("html", sb.toString());
         } else {
             view.addObject("");
         }
 
         return view;
+    }
+
+    @RequestMapping("require")
+    public String requireIndex() {
+        return "/teacher/require";
+    }
+
+    @RequestMapping(value = "require", method = RequestMethod.POST)
+    @ResponseBody
+    public ModelAndView requirepublish(RequireModel model, HttpSession session, final RedirectAttributes redirectAttributes) {
+        if (model != null) {
+            Require bean = new Require();
+            bean.setDescription(model.getDes());
+            bean.setFileid(model.getFileid());
+            bean.setTitle(model.getTitle());
+            bean.setUserid(getCurrentUser(session).getId());
+            bean.setCreatetime(new Date());
+            boolean result = requireServicel.addRequire(bean);
+            redirectAttributes.addFlashAttribute("redUrl", "/publishlist");
+            redirectAttributes.addFlashAttribute("status", "Success");
+            return new ModelAndView("redirect:/afterSubmit");
+        }
+        redirectAttributes.addFlashAttribute("redUrl", "/publishlist");
+        redirectAttributes.addFlashAttribute("status", "Fail");
+        return new ModelAndView("redirect:/afterSubmit");
+    }
+
+    @RequestMapping("guidebook")
+    public String guidebookIndex() {
+        return "/teacher/guidebook";
+    }
+
+    @RequestMapping(value = "guidebook", method = RequestMethod.POST)
+    @ResponseBody
+    public ModelAndView guidebookpublish(GuideBookModel model, HttpSession session, final RedirectAttributes redirectAttributes) {
+        if (model != null) {
+            Guidebook bean = new Guidebook();
+            bean.setDescription(model.getDes());
+            bean.setFileid(model.getFileid());
+            bean.setTitle(model.getTitle());
+            bean.setUserid(getCurrentUser(session).getId());
+            bean.setCreatetime(new Date());
+            boolean result = guideBookService.addGuideBook(bean);
+            redirectAttributes.addFlashAttribute("redUrl", "/welcome");
+            redirectAttributes.addFlashAttribute("status", "Success");
+            return new ModelAndView("redirect:/afterSubmit");
+        }
+        redirectAttributes.addFlashAttribute("redUrl", "/welcome");
+        redirectAttributes.addFlashAttribute("status", "Fail");
+        return new ModelAndView("redirect:/afterSubmit");
     }
 }

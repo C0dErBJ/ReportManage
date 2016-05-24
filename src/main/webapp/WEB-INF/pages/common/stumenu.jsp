@@ -38,6 +38,23 @@
                     </ul>
                 </li>
                 <li class="dropdown">
+                    <a aria-expanded="false" role="button" href="#" class="dropdown-toggle" data-toggle="dropdown">指导书
+                        <span class="caret"></span></a>
+                    <ul role="menu" class="dropdown-menu">
+                        <li><a class="menuitem" href="javascript:;" data-value="/student/guidebook">我的指导书</a>
+                        </li>
+
+                    </ul>
+                </li>
+                <li class="dropdown">
+                    <a aria-expanded="false" role="button" href="#" class="dropdown-toggle" data-toggle="dropdown">要求
+                        <span class="caret"></span></a>
+                    <ul role="menu" class="dropdown-menu">
+                        <li><a class="menuitem" href="javascript:;" data-value="/student/require">我的要求</a>
+                        </li>
+                    </ul>
+                </li>
+                <li class="dropdown">
                     <a aria-expanded="false" role="button" href="#" class="dropdown-toggle" data-toggle="dropdown">课题模板
                         <span class="caret"></span></a>
                     <ul role="menu" class="dropdown-menu">
