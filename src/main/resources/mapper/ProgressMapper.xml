@@ -135,4 +135,8 @@
       )  ORDER BY  m.CreateTime DESC LIMIT 1
     ) AND userid=#{id,jdbcType=INTEGER}
   </select>
+
+  <select id="selectAll" resultMap="BaseResultMap" >
+    SELECT * FROM Progress
+  </select>
 </mapper>

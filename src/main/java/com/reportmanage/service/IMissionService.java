@@ -13,4 +13,6 @@ public interface IMissionService {
     List<Mission> getMissionbyUser(int i);
 
     Mission selectMissionByClassWithUserid(int userid);
+
+    Mission getMission(int i);
 }

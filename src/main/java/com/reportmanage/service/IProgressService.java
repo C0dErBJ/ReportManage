@@ -11,4 +11,6 @@ public interface IProgressService {
     List<Progress> getProgress(int i);
 
     boolean insertProgress(Progress model);
+
+    List<Progress> getAll();
 }

@@ -37,11 +37,11 @@
                     <form id="form" action="/require" class="wizard-big" method="post">
                         <h1>信息</h1>
                         <fieldset>
-                            <h2>任务书信息</h2>
+                            <h2>要求信息</h2>
                             <div class="row">
                                 <div class="col-sm-8">
                                     <div class="form-group">
-                                        <label>课题 *</label>
+                                        <label>名称 *</label>
                                         <input id="lessontitle" name="title" type="text"
                                                class="form-control required" >
                                     </div>
@@ -61,7 +61,7 @@
                             </div>
 
                         </fieldset>
-                        <h1>任务书上传</h1>
+                        <h1>要求上传</h1>
                         <fieldset>
                             <h2>资料上传</h2>
                             <div class="row">

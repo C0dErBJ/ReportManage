@@ -17,7 +17,7 @@
     <link href="/themes/css/plugins/uploadify/uploadify.css" rel="stylesheet">
 
     <style>
-        body{
+        body {
             font-size: 18px;
         }
     </style>
@@ -37,27 +37,30 @@
                             <div class="form-group">
                                 <label class="col-sm-2 control-label">状态:</label>
                                 <div class="col-sm-10">
-                                    <label style="line-height: 30px;">${status==0?"未通过":"已通过"}</label>
+                                    <label style="line-height: 30px;">${status==0?"差":status==1?"中":status==2?"良":"优"}</label>
                                 </div>
                             </div>
                             <div class="hr-line-dashed"></div>
                             <div class="form-group">
                                 <label class="col-sm-2 control-label">老师留言:</label>
                                 <div class="col-sm-10">
-                                    <textarea type="text" class="form-control" style="min-height: 200px" disabled>${thdes}</textarea>
+                                    <textarea type="text" class="form-control" style="min-height: 200px"
+                                              disabled>${thdes}</textarea>
                                 </div>
                             </div>
                             <div class="form-group">
                                 <label class="col-sm-2 control-label">我的留言:</label>
                                 <div class="col-sm-10">
-                                    <textarea type="text" class="form-control" style="min-height: 200px" disabled>${stdes}</textarea>
+                                    <textarea type="text" class="form-control" style="min-height: 200px"
+                                              disabled>${stdes}</textarea>
                                 </div>
                             </div>
                             <div class="hr-line-dashed"></div>
                             <div class="form-group">
                                 <label class="col-sm-2 control-label">下载:</label>
                                 <div class="col-sm-10">
-                                    <a href="/file/${filepath}" class="form-control" style="border: hidden" target="_blank">下载地址</a>
+                                    <a href="/file/${filepath}" class="form-control" style="border: hidden"
+                                       target="_blank">下载地址</a>
                                 </div>
                             </div>
                         </div>

@@ -7,10 +7,12 @@ import com.fasterxml.jackson.databind.node.ObjectNode;
 import com.reportmanage.controller.base.BaseController;
 import com.reportmanage.controller.model.main.publish.GuideBookModel;
 import com.reportmanage.controller.model.main.publish.MissionModel;
+import com.reportmanage.controller.model.main.publish.PieModel;
 import com.reportmanage.controller.model.main.publish.RequireModel;
 import com.reportmanage.model.*;
 import com.reportmanage.service.*;
 import com.reportmanage.utils.Word2Html;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -28,6 +30,7 @@ import javax.xml.transform.TransformerException;
 import java.io.*;
 import java.io.File;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -132,9 +135,9 @@ public class PublishController extends BaseController {
             return new ModelAndView("redirect:/afterSubmit");
         }
         commit.setTeachernote(model.getDes());
-        commit.setIspass(model.getTitle().equals("已通过") ? 1 : 0);
+        commit.setIspass(model.getTitle().equals("优") ? 3 : model.getTitle().equals("良") ? 2 : model.getTitle().equals("中") ? 1 : 0);
         commitService.update(commit);
-        if (model.getTitle().equals("已通过")) {
+        if (model.getTitle().equals("中") || model.getTitle().equals("良") || model.getTitle().equals("优")) {
             Progress progress = new Progress();
             progress.setUserid(commit.getUserid());
             progress.setCreatetime(new Date());
@@ -160,7 +163,7 @@ public class PublishController extends BaseController {
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
         for (Commit item : list) {
             missionModel model = new missionModel();
-            model.des = item.getIspass() > 0 ? "完成" : "未完成";
+            model.des = item.getIspass() >= 1 ? "完成" : "未完成";
             model.title = userService.getUser(item.getUserid()).getName();
             model.url = "<a href='/commitdetail/" + item.getId() + "' class='btn btn-primary'>查看</a>";
             an.addPOJO(model);
@@ -283,4 +286,51 @@ public class PublishController extends BaseController {
         redirectAttributes.addFlashAttribute("status", "Fail");
         return new ModelAndView("redirect:/afterSubmit");
     }
+
+
+    @RequestMapping("progress")
+    @ResponseBody
+    public Object getProgress(HttpSession session) {
+        List<Progress> all = progressService.getAll();
+        List<Integer> mission = new ArrayList<Integer>();
+        for (Progress p : all) {
+            if (!mission.contains(p.getMissionid())) {
+                mission.add(p.getMissionid());
+            }
+        }
+
+        ObjectMapper mapper = new ObjectMapper();
+        ObjectNode root = mapper.createObjectNode();
+        root.put("draw", mission.size());
+        root.put("recordsTotal", mission.size());
+        root.put("recordsFiltered", mission.size());
+        ArrayNode an = root.arrayNode();
+        for (Integer item : mission) {
+            PieModel model = new PieModel();
+            Mission mission1 = missionService.getMission(item);
+            model.commitnum = 0;
+            model.passnum = 0;
+            if (mission1 != null) {
+                model.Title = mission1.getTitle();
+            }
+            for (Progress p : all) {
+                if (p.getMissionid().equals(item)&&p.getDescription().equals("提交作业")) {
+                    model.commitnum ++;
+                }
+                if (p.getMissionid().equals(item)&&p.getDescription().equals("审阅通过")) {
+                    model.passnum ++;
+                }
+            }
+            an.addPOJO(model);
+        }
+        root.putArray("data").addAll(an);
+        return root;
+    }
+
+    @RequestMapping("progressview")
+    public String prog() {
+        return "teacher/progress";
+    }
+
+
 }

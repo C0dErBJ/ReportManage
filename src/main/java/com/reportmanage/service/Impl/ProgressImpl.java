@@ -24,4 +24,8 @@ public class ProgressImpl implements IProgressService {
     public boolean insertProgress(Progress model) {
         return mapper.insert(model) > 0;
     }
+
+    public List<Progress> getAll() {
+        return mapper.selectAll();
+    }
 }

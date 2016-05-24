@@ -38,8 +38,10 @@
                                 <div class="form-group">
                                     <label class="col-sm-2 control-label">状态:</label>
                                     <div class="col-sm-10">
-                                        <input type="radio" class="check-box" value="未通过" name="title" ${status==0?"checked='checked'":""}>未通过
-                                        <input type="radio" class="check-box" value="已通过" name="title" ${status!=0?"checked='checked'":""}>已通过
+                                        <input type="radio" class="check-box" value="差" name="title" ${status==0?"checked='checked'":""}>差
+                                        <input type="radio" class="check-box" value="中" name="title" ${status==1?"checked='checked'":""}>中
+                                        <input type="radio" class="check-box" value="良" name="title" ${status==2?"checked='checked'":""}>良
+                                        <input type="radio" class="check-box" value="优" name="title" ${status==3?"checked='checked'":""}>优
                                     </div>
                                 </div>
                                 <div class="hr-line-dashed"></div>

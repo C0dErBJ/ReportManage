@@ -54,4 +54,6 @@ public interface ProgressMapper {
     int updateByPrimaryKey(Progress record);
 
     List<Progress> selectByUserid(Integer id);
+
+    List<Progress> selectAll();
 }

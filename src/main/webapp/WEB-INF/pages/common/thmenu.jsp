@@ -53,6 +53,14 @@
                     </ul>
                 </li>
                 <li class="dropdown">
+                    <a aria-expanded="false" role="button" href="#" class="dropdown-toggle" data-toggle="dropdown">进度
+                        <span class="caret"></span></a>
+                    <ul role="menu" class="dropdown-menu">
+                        <li><a class="menuitem" href="javascript:;" data-value="/progressview">进度查看</a>
+                        </li>
+                    </ul>
+                </li>
+                <li class="dropdown">
                     <a aria-expanded="false" role="button" href="#" class="dropdown-toggle" data-toggle="dropdown">课题模板
                         <span class="caret"></span></a>
                     <ul role="menu" class="dropdown-menu">
